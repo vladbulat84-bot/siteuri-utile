@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Site util pentru elev</title>
+  <style>
+    :root {
+      --bg: #f3f7ff;
+      --card: #ffffff;
+      --primary: #4f46e5;
+      --primary-2: #7c3aed;
+      --accent: #22c55e;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --shadow: 0 18px 40px rgba(79, 70, 229, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, sans-serif;
+      background: linear-gradient(135deg, #eef4ff, #f8f7ff 40%, #edfdf6);
+      color: var(--text);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 28px 20px 40px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      color: white;
+      padding: 28px 24px;
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 18px;
+      margin-bottom: 26px;
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: clamp(2rem, 3vw, 3rem);
+    }
+
+    .hero p {
+      margin: 6px 0 0;
+      opacity: 0.9;
+      font-size: 1rem;
+    }
+
+    .badge {
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.25);
+      backdrop-filter: blur(8px);
+      border-radius: 999px;
+      padding: 10px 16px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 22px;
+    }
+
+    .app {
+      background: var(--card);
+      border-radius: 22px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(79, 70, 229, 0.08);
+    }
+
+    .app h2 {
+      margin-top: 0;
+      font-size: 1.4rem;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .emoji {
+      font-size: 1.5rem;
+      background: #eef2ff;
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Calculator */
+    .display {
+      width: 100%;
+      min-height: 62px;
+      background: #111827;
+      color: white;
+      border: none;
+      border-radius: 14px;
+      font-size: 2rem;
+      text-align: right;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+
+    .calc-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .btn {
+      border: none;
+      background: #eef2ff;
+      color: var(--text);
+      min-height: 48px;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s ease, background 0.2s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn.op {
+      background: #e0e7ff;
+      color: var(--primary);
+    }
+
+    .btn.eq {
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      color: white;
+    }
+
+    .btn.clear {
+      background: #fee2e2;
+      color: var(--danger);
+    }
+
+    /* Todo */
+    .todo-form {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .todo-form input {
+      flex: 1;
+      border: 1px solid #dfe3f5;
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-size: 1rem;
+    }
+
+    .todo-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .todo-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      justify-content: space-between;
+      background: #f8fafc;
+      border: 1px solid #eef2ff;
+      border-radius: 12px;
+      padding: 10px 10px;
+    }
+
+    .todo-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 1;
+    }
+
+    .todo-item input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+
+    .todo-item span.completed {
+      text-decoration: line-through;
+      color: var(--muted);
+    }
+
+    .delete-task {
+      border: none;
+      background: #fef2f2;
+      color: var(--danger);
+      border-radius: 8px;
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    /* Timer */
+    .timer-display {
+      text-align: center;
+      font-size: clamp(2rem, 5vw, 3.1rem);
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      margin: 16px 0;
+      color: var(--primary);
+    }
+
+    .timer-controls {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 12px;
+    }
+
+    .timer-btn {
+      border: none;
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-weight: 700;
+      cursor: pointer;
+      background: #eef2ff;
+      color: var(--text);
+    }
+
+    .timer-btn.primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      color: white;
+    }
+
+    .timer-mode {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .mode-btn {
+      background: #f8fafc;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 10px;
+      cursor: pointer;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .mode-btn.active {
+      background: #dbeafe;
+      border-color: #93c5fd;
+      color: #1d4ed8;
+    }
+
+    /* Notes */
+    textarea {
+      width: 100%;
+      min-height: 180px;
+      border: 1px solid #dfe3f5;
+      border-radius: 14px;
+      padding: 12px 14px;
+      resize: vertical;
+      font-size: 1rem;
+      background: #f8fafc;
+    }
+
+    /* Planner */
+    .planner-form {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .planner-form input,
+    .planner-form select {
+      width: 100%;
+      border: 1px solid #dfe3f5;
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 0.98rem;
+    }
+
+    .planner-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .planner-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      background: #f8fafc;
+      border: 1px solid #eef2ff;
+      border-radius: 12px;
+      padding: 10px 12px;
+    }
+
+    .planner-item strong {
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .total {
+      margin-top: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #ecfdf5;
+      border: 1px solid #bbf7d0;
+      color: #166534;
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-weight: 700;
+    }
+
+    @media (max-width: 700px) {
+      .hero {
+        padding: 20px 18px;
+      }
+      .container {
+        padding-left: 14px;
+        padding-right: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="hero">
+      <div>
+        <h1>Elev Helper</h1>
+        <p>5 instrumente utile pentru o zi de școală eficientă</p>
+      </div>
+      <div class="badge">🧠 Studiază mai inteligent</div>
+    </header>
+
+    <main class="grid">
+      <!-- Calculator -->
+      <section class="app">
+        <h2><span>Calculator</span><span class="emoji">🧮</span></h2>
+        <input class="display" id="calcDisplay" value="0" readonly />
+        <div class="calc-grid">
+          <button class="btn clear" data-action="clear">C</button>
+          <button class="btn" data-value="(">(</button>
+          <button class="btn" data-value=")">)</button>
+          <button class="btn op" data-value="/">÷</button>
+
+          <button class="btn" data-value="7">7</button>
+          <button class="btn" data-value="8">8</button>
+          <button class="btn" data-value="9">9</button>
+          <button class="btn op" data-value="*">×</button>
+
+          <button class="btn" data-value="4">4</button>
+          <button class="btn" data-value="5">5</button>
+          <button class="btn" data-value="6">6</button>
+          <button class="btn op" data-value="-">−</button>
+
+          <button class="btn" data-value="1">1</button>
+          <button class="btn" data-value="2">2</button>
+          <button class="btn" data-value="3">3</button>
+          <button class="btn op" data-value="+">+</button>
+
+          <button class="btn" data-value="0" style="grid-column: span 2;">0</button>
+          <button class="btn" data-value=".">.</button>
+          <button class="btn eq" data-action="equals">=</button>
+        </div>
+      </section>
+
+      <!-- Todo -->
+      <section class="app">
+        <h2><span>Listă de lucru</span><span class="emoji">✅</span></h2>
+        <form class="todo-form" id="todoForm">
+          <input id="todoInput" type="text" placeholder="Adaugă o sarcină..." maxlength="80" />
+          <button class="btn eq" type="submit">Adaugă</button>
+        </form>
+        <ul class="todo-list" id="todoList"></ul>
+      </section>
+
+      <!-- Timer -->
+      <section class="app">
+        <h2><span>Timer</span><span class="emoji">⏱️</span></h2>
+        <div class="timer-display" id="timerDisplay">25:00</div>
+        <div class="timer-controls">
+          <button class="timer-btn primary" id="startPause">Start</button>
+          <button class="timer-btn" id="resetTimer">Reset</button>
+        </div>
+        <div class="timer-mode">
+          <button class="mode-btn active" data-mode="work">Lucru</button>
+          <button class="mode-btn" data-mode="break">Pauză</button>
+        </div>
+      </section>
+
+      <!-- Notes -->
+      <section class="app">
+        <h2><span>Notițe</span><span class="emoji">📝</span></h2>
+        <textarea id="notes" placeholder="Scrie lecțiile, ideile și teme..."></textarea>
+      </section>
+
+      <!-- Planner -->
+      <section class="app">
+        <h2><span>Program de studiu</span><span class="emoji">📚</span></h2>
+        <div class="planner-form">
+          <select id="subjectSelect">
+            <option value="Matematică">Matematică</option>
+            <option value="Română">Română</option>
+            <option value="Biologie">Biologie</option>
+            <option value="Istorie">Istorie</option>
+            <option value="Fizică">Fizică</option>
+            <option value="Chimie">Chimie</option>
+            <option value="Informatică">Informatică</option>
+            <option value="Geografie">Geografie</option>
+          </select>
+          <input id="minutesInput" type="number" min="5" step="5" value="30" placeholder="Minute" />
+          <button class="btn eq" id="addStudyItem">Adaugă în plan</button>
+        </div>
+        <ul class="planner-list" id="plannerList"></ul>
+        <div class="total">
+          <span>Total</span>
+          <span id="totalTime">0 min</span>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // Calculator
+    const calcDisplay = document.getElementById("calcDisplay");
+    let calcValue = "0";
+
+    document.querySelectorAll("[data-value]").forEach(button => {
+      button.addEventListener("click", () => {
+        const val = button.dataset.value;
+        if (calcValue === "0" && !["+", "-", "*", "/", ".", "(" , ")"].includes(val)) {
+          calcValue = val;
+        } else {
+          calcValue += val;
+        }
+        calcDisplay.value = calcValue;
+      });
+    });
+
+    document.querySelector("[data-action='clear']").addEventListener("click", () => {
+      calcValue = "0";
+      calcDisplay.value = calcValue;
+    });
+
+    document.querySelector("[data-action='equals']").addEventListener("click", () => {
+      try {
+        const result = Function(`"use strict"; return (${calcValue})`)();
+        calcValue = String(result);
+        calcDisplay.value = calcValue;
+      } catch {
+        calcDisplay.value = "Eroare";
+        calcValue = "0";
+      }
+    });
+
+    // Todo
+    const todoForm = document.getElementById("todoForm");
+    const todoInput = document.getElementById("todoInput");
+    const todoList = document.getElementById("todoList");
+
+    let tasks = JSON.parse(localStorage.getItem("studentTasks")) || [
+      { text: "Repetă lecția de matematică", done: false },
+      { text: "Fă tema de română", done: true }
+    ];
+
+    function renderTodos() {
+      todoList.innerHTML = "";
+      tasks.forEach((task, index) => {
+        const li = document.createElement("li");
+        li.className = "todo-item";
+
+        const left = document.createElement("div");
+        left.className = "todo-left";
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.checked = task.done;
+        checkbox.addEventListener("change", () => {
+          tasks[index].done = checkbox.checked;
+          saveTasks();
+          renderTodos();
+        });
+
+        const text = document.createElement("span");
+        text.textContent = task.text;
+        if (task.done) text.classList.add("completed");
+
+        const deleteBtn = document.createElement("button");
+        deleteBtn.className = "delete-task";
+        deleteBtn.textContent = "×";
+        deleteBtn.addEventListener("click", () => {
+          tasks.splice(index, 1);
+          saveTasks();
+          renderTodos();
+        });
+
+        left.appendChild(checkbox);
+        left.appendChild(text);
+        li.appendChild(left);
+        li.appendChild(deleteBtn);
+        todoList.appendChild(li);
+      });
+    }
+
+    function saveTasks() {
+      localStorage.setItem("studentTasks", JSON.stringify(tasks));
+    }
+
+    todoForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const text = todoInput.value.trim();
+      if (!text) return;
+      tasks.unshift({ text, done: false });
+      saveTasks();
+      renderTodos();
+      todoInput.value = "";
+    });
+
+    renderTodos();
+
+    // Timer
+    const timerDisplay = document.getElementById("timerDisplay");
+    const startPauseBtn = document.getElementById("startPause");
+    const resetTimerBtn = document.getElementById("resetTimer");
+    const modes = document.querySelectorAll(".mode-btn");
+
+    let timerMode = "work";
+    let secondsLeft = 25 * 60;
+    let timerInterval = null;
+    let isRunning = false;
+
+    function updateDisplay() {
+      const mins = String(Math.floor(secondsLeft / 60)).padStart(2, "0");
+      const secs = String(secondsLeft % 60).padStart(2, "0");
+      timerDisplay.textContent = `${mins}:${secs}`;
+    }
+
+    function setMode(mode) {
+      timerMode = mode;
+      modes.forEach(btn => btn.classList.toggle("active", btn.dataset.mode === mode));
+      if (mode === "work") {
+        secondsLeft = 25 * 60;
+      } else {
+        secondsLeft = 5 * 60;
+      }
+      stopTimer();
+      updateDisplay();
+    }
+
+    function tick() {
+      if (secondsLeft > 0) {
+        secondsLeft--;
+        updateDisplay();
+      } else {
+        stopTimer();
+        alert(timerMode === "work" ? "Timpul de lucru s-a terminat! 😄" : "Pauza s-a terminat! 📚");
+        setMode(timerMode === "work" ? "break" : "work");
+      }
+    }
+
+    function stopTimer() {
+      isRunning = false;
+      clearInterval(timerInterval);
+      timerInterval = null;
+      startPauseBtn.textContent = "Start";
+    }
+
+    startPauseBtn.addEventListener("click", () => {
+      if (isRunning) {
+        stopTimer();
+      } else {
+        isRunning = true;
+        startPauseBtn.textContent = "Pauză";
+        timerInterval = setInterval(tick, 1000);
+      }
+    });
+
+    resetTimerBtn.addEventListener("click", () => {
+      stopTimer();
+      if (timerMode === "work") secondsLeft = 25 * 60;
+      else secondsLeft = 5 * 60;
+      updateDisplay();
+    });
+
+    modes.forEach(btn => {
+      btn.addEventListener("click", () => setMode(btn.dataset.mode));
+    });
+
+    updateDisplay();
+
+    // Notes
+    const notesArea = document.getElementById("notes");
+    const savedNotes = localStorage.getItem("studentNotes");
+    if (savedNotes) notesArea.value = savedNotes;
+
+    notesArea.addEventListener("input", () => {
+      localStorage.setItem("studentNotes", notesArea.value);
+    });
+
+    // Planner
+    const plannerList = document.getElementById("plannerList");
+    const totalTimeEl = document.getElementById("totalTime");
+    const subjectSelect = document.getElementById("subjectSelect");
+    const minutesInput = document.getElementById("minutesInput");
+    const addStudyItemBtn = document.getElementById("addStudyItem");
+
+    let studyPlan = JSON.parse(localStorage.getItem("studyPlan")) || [
+      { subject: "Matematică", minutes: 30 },
+      { subject: "Română", minutes: 25 }
+    ];
+
+    function updateTotal() {
+      const total = studyPlan.reduce((sum, item) => sum + Number(item.minutes), 0);
+      totalTimeEl.textContent = `${total} min`;
+    }
+
+    function renderPlanner() {
+      plannerList.innerHTML = "";
+      studyPlan.forEach((item, index) => {
+        const li = document.createElement("li");
+        li.className = "planner-item";
+
+        const info = document.createElement("div");
+        const title = document.createElement("strong");
+        title.textContent = item.subject;
+        const time = document.createElement("span");
+        time.textContent = `${item.minutes} minute`;
+        info.appendChild(title);
+        info.appendChild(time);
+
+        const button = document.createElement("button");
+        button.className = "delete-task";
+        button.textContent = "×";
+        button.title = "Șterge";
+        button.addEventListener("click", () => {
+          studyPlan.splice(index, 1);
+          savePlan();
+          renderPlanner();
+        });
+
+        li.appendChild(info);
+        li.appendChild(button);
+        plannerList.appendChild(li);
+      });
+
+      updateTotal();
+    }
+
+    function savePlan() {
+      localStorage.setItem("studyPlan", JSON.stringify(studyPlan));
+    }
+
+    addStudyItemBtn.addEventListener("click", () => {
+      const subject = subjectSelect.value.trim();
+      const minutes = Number(minutesInput.value);
+
+      if (!subject || !minutes || minutes <= 0) return;
+
+      studyPlan.push({ subject, minutes });
+      savePlan();
+      renderPlanner();
+      minutesInput.value = 30;
+    });
+
+    renderPlanner();
+  </script>
+</body>
+</html>
